@@ -1,0 +1,28 @@
+# EIDE
+/.eide/log
+/.eide.usr.ctx.json
+*.ept
+*.eide-template
+
+# VS Code / user settings
+.vscode/launch.json
+/MDK-ARM/.settings/
+
+# build output
+/build/
+/MDK-ARM/build/
+/MDK-ARM/bin/
+/MDK-ARM/obj/
+/MDK-ARM/out/
+/MDK-ARM/calss_project_stm32/
+/MDK-ARM/HAL_F407_car/
+
+# Keil user files
+*.uvoptx
+*.uvguix.*
+*.uvprojx.user
+*.dbgconf
+/MDK-ARM/DebugConfig/
+
+# Keil listing
+*.lst
