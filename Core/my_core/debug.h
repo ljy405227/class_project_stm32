@@ -25,7 +25,7 @@
         DEBUG_LOG("  Board   : STM32F407ZGT6\r\n"); \
         DEBUG_LOG("  System  : freertos\r\n"); \
         DEBUG_LOG("  Version : V1.0   [Maintenance]\r\n"); \
-        DEBUG_LOG("  Author  : Ê¨¢‰πêË±Ü <2703867620@qq.com>\r\n"); \
+        DEBUG_LOG("  Author  : ª∂¿÷∂π <2703867620@qq.com>\r\n"); \
         DEBUG_LOG("  git     : https://github.com/ljy405227/class_project_stm32.git\r\n"); \
         DEBUG_LOG("  Repo    : class_stm32/calss_project_stm32\r\n"); \
         DEBUG_LOG("  Build   : %s %s\r\n", __DATE__, __TIME__); \

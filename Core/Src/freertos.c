@@ -75,6 +75,13 @@ const osThreadAttr_t myTask_timer_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for myTask_seg */
+osThreadId_t myTask_segHandle;
+const osThreadAttr_t myTask_seg_attributes = {
+  .name = "myTask_seg",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -85,6 +92,7 @@ void StartTask_key(void *argument);
 void StartTask_control(void *argument);
 void StartTask_shell(void *argument);
 void StartTask_timer(void *argument);
+void StartTask_seg(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -126,6 +134,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of myTask_timer */
   myTask_timerHandle = osThreadNew(StartTask_timer, NULL, &myTask_timer_attributes);
+
+  /* creation of myTask_seg */
+  myTask_segHandle = osThreadNew(StartTask_seg, NULL, &myTask_seg_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -191,6 +202,20 @@ void StartTask_timer(void *argument)
   /* USER CODE BEGIN StartTask_timer */
   app_task_timer(argument);
   /* USER CODE END StartTask_timer */
+}
+
+/* USER CODE BEGIN Header_StartTask_seg */
+/**
+* @brief Function implementing the myTask_seg thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask_seg */
+void StartTask_seg(void *argument)
+{
+  /* USER CODE BEGIN StartTask_seg */
+  app_task_seg(argument);
+  /* USER CODE END StartTask_seg */
 }
 
 /* Private application code --------------------------------------------------*/

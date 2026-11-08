@@ -17,6 +17,7 @@
 #include "bsp_pwm_in.h"
 #include "bsp_pwm_out.h"
 #include "bsp_shell.h"
+#include "bsp_seg.h"
 
 static void app_init(void)
 {
@@ -139,6 +140,22 @@ void app_task_shell(void *argument)
     {
         shell_poll();
         osDelay(10U);
+    }
+#else
+    osThreadExit();
+#endif
+}
+
+void app_task_seg(void *argument)
+{
+    (void)argument;
+
+#if CFG_SEG_EN
+    bsp_seg_init();
+    bsp_seg_show_digit(0U, 1U);
+    for (;;)
+    {
+        osDelay(1000U);
     }
 #else
     osThreadExit();

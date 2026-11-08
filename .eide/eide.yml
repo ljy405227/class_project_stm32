@@ -32,6 +32,7 @@ virtualFolder:
                 - path: Core/Src/stm32f4xx_it.c
                 - path: Core/Src/stm32f4xx_hal_msp.c
                 - path: Core/Src/stm32f4xx_hal_timebase_tim.c
+                - path: Core/Src/fsmc.c
               folders: []
             - name: my_core
               files:
@@ -50,6 +51,7 @@ virtualFolder:
                 - path: Core/my_core/drivers/drv_w25q128.c
                 - path: Core/my_core/drivers/drv_dht11.c
                 - path: Core/my_core/utils/my_tool.c
+                - path: Core/my_core/bsp/bsp_seg.c
               folders: []
     - name: Drivers
       files: []
@@ -77,6 +79,8 @@ virtualFolder:
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
+            - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sram.c
+            - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.c
           folders: []
         - name: CMSIS
           files:

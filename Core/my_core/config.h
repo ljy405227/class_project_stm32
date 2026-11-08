@@ -19,6 +19,7 @@
 #define CFG_PWM_OUT_EN          0
 #define CFG_SHELL_EN            1
 #define CFG_TIM6_EN             1
+#define CFG_SEG_EN              1
 
 /* 调试打印 */
 #define CFG_DEBUG_LOG_EN        1
