@@ -6,6 +6,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "tim.h"
+#include <stdio.h>
 
 #include "bsp_led.h"
 #include "bsp_key.h"
@@ -18,6 +19,8 @@
 #include "bsp_pwm_out.h"
 #include "bsp_shell.h"
 #include "bsp_seg.h"
+#include "bsp_lcd.h"
+#include "bsp_rtc.h"
 
 static void app_init(void)
 {
@@ -41,6 +44,9 @@ static void app_init(void)
 #endif
 #if CFG_DHT11_EN
     bsp_dht11_init();
+#endif
+#if CFG_RTC_EN
+    bsp_rtc_init();
 #endif
 #if CFG_ADC_EN
     bsp_adc_init();
@@ -148,13 +154,95 @@ void app_task_shell(void *argument)
 
 void app_task_seg(void *argument)
 {
+    static const uint8_t s_seg_digits[6] = {1U, 2U, 3U, 4U, 5U, 6U};
+    uint8_t i;
+
     (void)argument;
 
 #if CFG_SEG_EN
     bsp_seg_init();
-    bsp_seg_show_digit(0U, 1U);
+
     for (;;)
     {
+        for (i = 0U; i < 6U; i++)
+        {
+            bsp_seg_show_digit(i, s_seg_digits[i]);
+            osDelay(1U);
+        }
+    }
+#else
+    osThreadExit();
+#endif
+}
+
+void app_task_lcd(void *argument)
+{
+    (void)argument;
+
+#if CFG_LCD_EN
+    char line[32];
+    uint32_t last_dht = 0U;
+#if CFG_DHT11_EN
+    uint8_t temp = 0U;
+    uint8_t hum = 0U;
+#endif
+#if CFG_RTC_EN
+    uint8_t hours;
+    uint8_t minutes;
+    uint8_t seconds;
+    uint8_t month;
+    uint8_t day;
+    uint16_t year;
+#endif
+
+    bsp_lcd_init();
+    bsp_lcd_clear(BSP_LCD_BLACK);
+    bsp_lcd_text(10U, 8U, "RTC + DHT11", BSP_LCD_WHITE, BSP_LCD_BLACK, 2U);
+#if CFG_RTC_EN
+    bsp_lcd_text(10U, 45U, "--:--:--", BSP_LCD_WHITE, BSP_LCD_BLACK, 3U);
+    bsp_lcd_text(10U, 100U, "----.--.--", BSP_LCD_YELLOW, BSP_LCD_BLACK, 2U);
+#endif
+#if CFG_DHT11_EN
+    bsp_lcd_text(10U, 140U, "Temp: -- C", BSP_LCD_YELLOW, BSP_LCD_BLACK, 2U);
+    bsp_lcd_text(10U, 180U, "Hum : -- %RH", BSP_LCD_CYAN, BSP_LCD_BLACK, 2U);
+    bsp_lcd_text(10U, 216U, "OK", BSP_LCD_GREEN, BSP_LCD_BLACK, 1U);
+    last_dht = HAL_GetTick() - 2000U;
+#endif
+
+    for (;;)
+    {
+#if CFG_RTC_EN
+        bsp_rtc_get(&hours, &minutes, &seconds, &year, &month, &day);
+
+        snprintf(line, sizeof(line), "%02u:%02u:%02u",
+                 (unsigned)hours, (unsigned)minutes, (unsigned)seconds);
+        bsp_lcd_text(10U, 45U, line, BSP_LCD_WHITE, BSP_LCD_BLACK, 3U);
+
+        snprintf(line, sizeof(line), "%04u-%02u-%02u",
+                 (unsigned)year, (unsigned)month, (unsigned)day);
+        bsp_lcd_text(10U, 100U, line, BSP_LCD_YELLOW, BSP_LCD_BLACK, 2U);
+#endif
+
+#if CFG_DHT11_EN
+        if ((HAL_GetTick() - last_dht) >= 2000U)
+        {
+            last_dht = HAL_GetTick();
+            if (bsp_dht11_read(&temp, &hum) == 0)
+            {
+                snprintf(line, sizeof(line), "Temp: %u C", (unsigned)temp);
+                bsp_lcd_text(10U, 140U, line, BSP_LCD_YELLOW, BSP_LCD_BLACK, 2U);
+
+                snprintf(line, sizeof(line), "Hum : %u %%RH", (unsigned)hum);
+                bsp_lcd_text(10U, 180U, line, BSP_LCD_CYAN, BSP_LCD_BLACK, 2U);
+
+                bsp_lcd_text(10U, 216U, "OK          ", BSP_LCD_GREEN, BSP_LCD_BLACK, 1U);
+            }
+            else
+            {
+                bsp_lcd_text(10U, 216U, "Sensor error", BSP_LCD_RED, BSP_LCD_BLACK, 1U);
+            }
+        }
+#endif
         osDelay(1000U);
     }
 #else

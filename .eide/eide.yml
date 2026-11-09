@@ -33,6 +33,7 @@ virtualFolder:
                 - path: Core/Src/stm32f4xx_hal_msp.c
                 - path: Core/Src/stm32f4xx_hal_timebase_tim.c
                 - path: Core/Src/fsmc.c
+                - path: Core/Src/rtc.c
               folders: []
             - name: my_core
               files:
@@ -50,8 +51,12 @@ virtualFolder:
                 - path: Core/my_core/drivers/drv_at24c02.c
                 - path: Core/my_core/drivers/drv_w25q128.c
                 - path: Core/my_core/drivers/drv_dht11.c
+                - path: Core/my_core/drivers/drv_ili9341.c
+                - path: Core/my_core/drivers/drv_font8x16.c
                 - path: Core/my_core/utils/my_tool.c
                 - path: Core/my_core/bsp/bsp_seg.c
+                - path: Core/my_core/bsp/bsp_lcd.c
+                - path: Core/my_core/bsp/bsp_rtc.c
               folders: []
     - name: Drivers
       files: []
@@ -81,6 +86,8 @@ virtualFolder:
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sram.c
             - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fsmc.c
+            - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.c
+            - path: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.c
           folders: []
         - name: CMSIS
           files:
@@ -254,4 +261,14 @@ targets:
         bin: ""
         interface: cmsis-dap-v1
         target: stm32f4x
+      STLink:
+        address: "0x8000000"
+        bin: ""
+        elFile: None
+        optionBytes: .eide/calss_project_stm32.st.option.bytes.ini
+        otherCmds: ""
+        proType: SWD
+        resetMode: default
+        runAfterProgram: true
+        speed: 4000
     uploader: OpenOCD

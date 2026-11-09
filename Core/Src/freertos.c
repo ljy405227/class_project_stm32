@@ -82,6 +82,13 @@ const osThreadAttr_t myTask_seg_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
+/* Definitions for myTask_lcd */
+osThreadId_t myTask_lcdHandle;
+const osThreadAttr_t myTask_lcd_attributes = {
+  .name = "myTask_lcd",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityBelowNormal,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -93,6 +100,7 @@ void StartTask_control(void *argument);
 void StartTask_shell(void *argument);
 void StartTask_timer(void *argument);
 void StartTask_seg(void *argument);
+void StartTask_lcd(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -137,6 +145,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of myTask_seg */
   myTask_segHandle = osThreadNew(StartTask_seg, NULL, &myTask_seg_attributes);
+
+  /* creation of myTask_lcd */
+  myTask_lcdHandle = osThreadNew(StartTask_lcd, NULL, &myTask_lcd_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -216,6 +227,20 @@ void StartTask_seg(void *argument)
   /* USER CODE BEGIN StartTask_seg */
   app_task_seg(argument);
   /* USER CODE END StartTask_seg */
+}
+
+/* USER CODE BEGIN Header_StartTask_lcd */
+/**
+* @brief Function implementing the myTask_lcd thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask_lcd */
+void StartTask_lcd(void *argument)
+{
+  /* USER CODE BEGIN StartTask_lcd */
+  app_task_lcd(argument);
+  /* USER CODE END StartTask_lcd */
 }
 
 /* Private application code --------------------------------------------------*/

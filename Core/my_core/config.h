@@ -13,13 +13,15 @@
 #define CFG_BEEP_EN             1
 #define CFG_EEPROM_EN           0
 #define CFG_SPIFLASH_EN         0
-#define CFG_DHT11_EN            0
+#define CFG_DHT11_EN            1
 #define CFG_ADC_EN              0
 #define CFG_PWM_IN_EN           0
 #define CFG_PWM_OUT_EN          0
 #define CFG_SHELL_EN            1
 #define CFG_TIM6_EN             1
 #define CFG_SEG_EN              1
+#define CFG_LCD_EN              1
+#define CFG_RTC_EN              1
 
 /* 调试打印 */
 #define CFG_DEBUG_LOG_EN        1

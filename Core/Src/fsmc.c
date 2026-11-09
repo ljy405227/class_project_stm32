@@ -26,6 +26,7 @@
 /* USER CODE END 0 */
 
 SRAM_HandleTypeDef hsram3;
+SRAM_HandleTypeDef hsram4;
 
 /* FSMC initialization function */
 void MX_FSMC_Init(void)
@@ -74,6 +75,40 @@ void MX_FSMC_Init(void)
     Error_Handler( );
   }
 
+  /** Perform the SRAM4 memory initialization sequence
+  */
+  hsram4.Instance = FSMC_NORSRAM_DEVICE;
+  hsram4.Extended = FSMC_NORSRAM_EXTENDED_DEVICE;
+  /* hsram4.Init */
+  hsram4.Init.NSBank = FSMC_NORSRAM_BANK4;
+  hsram4.Init.DataAddressMux = FSMC_DATA_ADDRESS_MUX_DISABLE;
+  hsram4.Init.MemoryType = FSMC_MEMORY_TYPE_SRAM;
+  hsram4.Init.MemoryDataWidth = FSMC_NORSRAM_MEM_BUS_WIDTH_16;
+  hsram4.Init.BurstAccessMode = FSMC_BURST_ACCESS_MODE_DISABLE;
+  hsram4.Init.WaitSignalPolarity = FSMC_WAIT_SIGNAL_POLARITY_LOW;
+  hsram4.Init.WrapMode = FSMC_WRAP_MODE_DISABLE;
+  hsram4.Init.WaitSignalActive = FSMC_WAIT_TIMING_BEFORE_WS;
+  hsram4.Init.WriteOperation = FSMC_WRITE_OPERATION_ENABLE;
+  hsram4.Init.WaitSignal = FSMC_WAIT_SIGNAL_DISABLE;
+  hsram4.Init.ExtendedMode = FSMC_EXTENDED_MODE_DISABLE;
+  hsram4.Init.AsynchronousWait = FSMC_ASYNCHRONOUS_WAIT_DISABLE;
+  hsram4.Init.WriteBurst = FSMC_WRITE_BURST_DISABLE;
+  hsram4.Init.PageSize = FSMC_PAGE_SIZE_NONE;
+  /* Timing */
+  Timing.AddressSetupTime = 15;
+  Timing.AddressHoldTime = 15;
+  Timing.DataSetupTime = 255;
+  Timing.BusTurnAroundDuration = 15;
+  Timing.CLKDivision = 16;
+  Timing.DataLatency = 17;
+  Timing.AccessMode = FSMC_ACCESS_MODE_A;
+  /* ExtTiming */
+
+  if (HAL_SRAM_Init(&hsram4, &Timing, NULL) != HAL_OK)
+  {
+    Error_Handler( );
+  }
+
   /* USER CODE BEGIN FSMC_Init 2 */
 
   /* USER CODE END FSMC_Init 2 */
@@ -115,6 +150,7 @@ static void HAL_FSMC_MspInit(void){
   PD4   ------> FSMC_NOE
   PD5   ------> FSMC_NWE
   PG10   ------> FSMC_NE3
+  PG12   ------> FSMC_NE4
   */
   /* GPIO_InitStruct */
   GPIO_InitStruct.Pin = GPIO_PIN_12;
@@ -148,7 +184,7 @@ static void HAL_FSMC_MspInit(void){
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /* GPIO_InitStruct */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -205,6 +241,7 @@ static void HAL_FSMC_MspDeInit(void){
   PD4   ------> FSMC_NOE
   PD5   ------> FSMC_NWE
   PG10   ------> FSMC_NE3
+  PG12   ------> FSMC_NE4
   */
 
   HAL_GPIO_DeInit(GPIOF, GPIO_PIN_12);
@@ -217,7 +254,7 @@ static void HAL_FSMC_MspDeInit(void){
                           |GPIO_PIN_15|GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_4
                           |GPIO_PIN_5);
 
-  HAL_GPIO_DeInit(GPIOG, GPIO_PIN_10);
+  HAL_GPIO_DeInit(GPIOG, GPIO_PIN_10|GPIO_PIN_12);
 
   /* USER CODE BEGIN FSMC_MspDeInit 1 */
 
